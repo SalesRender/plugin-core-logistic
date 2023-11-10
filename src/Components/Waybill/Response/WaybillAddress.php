@@ -5,11 +5,11 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Waybill\Response;
+namespace SalesRender\Plugin\Core\Logistic\Components\Waybill\Response;
 
 
 use JsonSerializable;
-use Leadvertex\Components\Address\Address;
+use SalesRender\Components\Address\Address;
 
 class WaybillAddress implements JsonSerializable
 {

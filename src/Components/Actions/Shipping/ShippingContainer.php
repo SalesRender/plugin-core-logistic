@@ -1,8 +1,8 @@
 <?php
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Actions\Shipping;
+namespace SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping;
 
-use Leadvertex\Plugin\Core\Logistic\Components\Actions\Shipping\Exception\ShippingContainerException;
+use SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping\Exception\ShippingContainerException;
 
 final class ShippingContainer
 {

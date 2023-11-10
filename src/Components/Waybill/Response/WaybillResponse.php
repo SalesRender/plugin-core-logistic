@@ -5,10 +5,10 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Waybill\Response;
+namespace SalesRender\Plugin\Core\Logistic\Components\Waybill\Response;
 
 
-use Leadvertex\Plugin\Components\Logistic\Logistic;
+use SalesRender\Plugin\Components\Logistic\Logistic;
 
 class WaybillResponse
 {

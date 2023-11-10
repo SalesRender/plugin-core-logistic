@@ -5,13 +5,13 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Waybill;
+namespace SalesRender\Plugin\Core\Logistic\Components\Waybill;
 
 
-use Leadvertex\Plugin\Components\Access\Registration\Registration;
-use Leadvertex\Plugin\Components\Form\FormData;
-use Leadvertex\Plugin\Components\Logistic\LogisticStatus;
-use Leadvertex\Plugin\Core\Actions\ActionInterface;
+use SalesRender\Plugin\Components\Access\Registration\Registration;
+use SalesRender\Plugin\Components\Form\FormData;
+use SalesRender\Plugin\Components\Logistic\LogisticStatus;
+use SalesRender\Plugin\Core\Actions\ActionInterface;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest;
 

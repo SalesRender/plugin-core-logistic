@@ -5,20 +5,20 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Core\Logistic\Components;
+namespace SalesRender\Plugin\Core\Logistic\Components;
 
 
 use Adbar\Dot;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
-use Leadvertex\Plugin\Components\Access\Registration\Registration;
-use Leadvertex\Plugin\Components\Batch\Batch;
-use Leadvertex\Plugin\Components\Batch\BatchHandlerInterface;
-use Leadvertex\Plugin\Components\Db\Helpers\UuidHelper;
-use Leadvertex\Plugin\Components\Guzzle\Guzzle;
-use Leadvertex\Plugin\Components\Logistic\Components\ShippingAttachment;
 use Psr\Http\Message\ResponseInterface;
 use RuntimeException;
+use SalesRender\Plugin\Components\Access\Registration\Registration;
+use SalesRender\Plugin\Components\Batch\Batch;
+use SalesRender\Plugin\Components\Batch\BatchHandlerInterface;
+use SalesRender\Plugin\Components\Db\Helpers\UuidHelper;
+use SalesRender\Plugin\Components\Guzzle\Guzzle;
+use SalesRender\Plugin\Components\Logistic\Components\ShippingAttachment;
 use XAKEPEHOK\Path\Path;
 
 abstract class BatchShippingHandler implements BatchHandlerInterface

@@ -5,12 +5,12 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Waybill;
+namespace SalesRender\Plugin\Core\Logistic\Components\Waybill;
 
 
-use Leadvertex\Plugin\Components\Form\Form;
-use Leadvertex\Plugin\Components\Form\FormData;
-use Leadvertex\Plugin\Core\Logistic\Components\Waybill\Response\WaybillResponse;
+use SalesRender\Plugin\Components\Form\Form;
+use SalesRender\Plugin\Components\Form\FormData;
+use SalesRender\Plugin\Core\Logistic\Components\Waybill\Response\WaybillResponse;
 
 interface WaybillHandlerInterface
 {

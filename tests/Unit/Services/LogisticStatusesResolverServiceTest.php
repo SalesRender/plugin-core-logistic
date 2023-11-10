@@ -1,15 +1,14 @@
 <?php
 
-namespace Leadvertex\Services;
+namespace SalesRender\Services;
 
-use Leadvertex\Plugin\Components\Db\Components\PluginReference;
-use Leadvertex\Plugin\Components\Logistic\Exceptions\LogisticStatusTooLongException;
-use Leadvertex\Plugin\Components\Logistic\LogisticStatus;
-use Leadvertex\Plugin\Core\Logistic\Components\Track\Exception\TrackException;
-use Leadvertex\Plugin\Core\Logistic\Components\Track\Track;
-use Leadvertex\Plugin\Core\Logistic\Services\LogisticStatusesResolverService;
 use Mockery;
-use Leadvertex\Helpers\LogisticTestCase;
+use SalesRender\Helpers\LogisticTestCase;
+use SalesRender\Plugin\Components\Logistic\Exceptions\LogisticStatusTooLongException;
+use SalesRender\Plugin\Components\Logistic\LogisticStatus;
+use SalesRender\Plugin\Core\Logistic\Components\Track\Exception\TrackException;
+use SalesRender\Plugin\Core\Logistic\Components\Track\Track;
+use SalesRender\Plugin\Core\Logistic\Services\LogisticStatusesResolverService;
 use XAKEPEHOK\EnumHelper\Exception\OutOfEnumException;
 
 class LogisticStatusesResolverServiceTest extends LogisticTestCase

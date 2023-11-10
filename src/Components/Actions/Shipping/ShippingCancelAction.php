@@ -1,8 +1,8 @@
 <?php
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Actions\Shipping;
+namespace SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping;
 
-use Leadvertex\Plugin\Core\Actions\SpecialRequestAction;
+use SalesRender\Plugin\Core\Actions\SpecialRequestAction;
 
 abstract class ShippingCancelAction extends SpecialRequestAction
 {

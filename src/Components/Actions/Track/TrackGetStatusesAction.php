@@ -1,12 +1,12 @@
 <?php
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Actions\Track;
+namespace SalesRender\Plugin\Core\Logistic\Components\Actions\Track;
 
-use Leadvertex\Plugin\Components\Db\Exceptions\DatabaseException;
-use Leadvertex\Plugin\Core\Actions\ActionInterface;
-use Leadvertex\Plugin\Core\Logistic\Components\Track\Track;
-use Leadvertex\Plugin\Core\Logistic\Services\LogisticStatusesResolverService;
 use ReflectionException;
+use SalesRender\Plugin\Components\Db\Exceptions\DatabaseException;
+use SalesRender\Plugin\Core\Actions\ActionInterface;
+use SalesRender\Plugin\Core\Logistic\Components\Track\Track;
+use SalesRender\Plugin\Core\Logistic\Services\LogisticStatusesResolverService;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
 

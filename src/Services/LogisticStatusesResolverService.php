@@ -1,9 +1,9 @@
 <?php
 
-namespace Leadvertex\Plugin\Core\Logistic\Services;
+namespace SalesRender\Plugin\Core\Logistic\Services;
 
-use Leadvertex\Plugin\Components\Logistic\LogisticStatus;
-use Leadvertex\Plugin\Core\Logistic\Components\Track\Track;
+use SalesRender\Plugin\Components\Logistic\LogisticStatus;
+use SalesRender\Plugin\Core\Logistic\Components\Track\Track;
 
 class LogisticStatusesResolverService
 {

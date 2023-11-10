@@ -5,12 +5,12 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Core\Logistic\Factories;
+namespace SalesRender\Plugin\Core\Logistic\Factories;
 
 
 use Symfony\Component\Console\Application;
 
-class ConsoleAppFactory extends \Leadvertex\Plugin\Core\Factories\ConsoleAppFactory
+class ConsoleAppFactory extends \SalesRender\Plugin\Core\Factories\ConsoleAppFactory
 {
 
     public function build(): Application

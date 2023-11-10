@@ -5,11 +5,11 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Waybill;
+namespace SalesRender\Plugin\Core\Logistic\Components\Waybill;
 
 
-use Leadvertex\Plugin\Components\Form\Form;
-use Leadvertex\Plugin\Core\Logistic\Components\Waybill\Exception\WaybillContainerException;
+use SalesRender\Plugin\Components\Form\Form;
+use SalesRender\Plugin\Core\Logistic\Components\Waybill\Exception\WaybillContainerException;
 
 final class WaybillContainer
 {

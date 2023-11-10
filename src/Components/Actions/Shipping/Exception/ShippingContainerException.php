@@ -1,6 +1,6 @@
 <?php
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Actions\Shipping\Exception;
+namespace SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping\Exception;
 
 use Exception;
 

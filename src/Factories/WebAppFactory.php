@@ -5,17 +5,17 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Core\Logistic\Factories;
+namespace SalesRender\Plugin\Core\Logistic\Factories;
 
 
-use Leadvertex\Plugin\Core\Logistic\Components\Actions\Shipping\Exception\ShippingContainerException;
-use Leadvertex\Plugin\Core\Logistic\Components\Actions\Shipping\ShippingContainer;
-use Leadvertex\Plugin\Core\Logistic\Components\Actions\Track\TrackGetStatusesAction;
-use Leadvertex\Plugin\Core\Logistic\Components\Waybill\WaybillContainer;
-use Leadvertex\Plugin\Core\Logistic\Components\Waybill\WaybillHandlerAction;
+use SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping\Exception\ShippingContainerException;
+use SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping\ShippingContainer;
+use SalesRender\Plugin\Core\Logistic\Components\Actions\Track\TrackGetStatusesAction;
+use SalesRender\Plugin\Core\Logistic\Components\Waybill\WaybillContainer;
+use SalesRender\Plugin\Core\Logistic\Components\Waybill\WaybillHandlerAction;
 use Slim\App;
 
-class WebAppFactory extends \Leadvertex\Plugin\Core\Factories\WebAppFactory
+class WebAppFactory extends \SalesRender\Plugin\Core\Factories\WebAppFactory
 {
 
     public function build(): App

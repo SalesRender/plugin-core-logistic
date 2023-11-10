@@ -1,25 +1,25 @@
 {
-  "name": "leadvertex/plugin-core-logistic",
-  "description": "LeadVertex plugin logistic core",
+  "name": "salesrender/plugin-core-logistic",
+  "description": "SalesRender plugin logistic core",
   "type": "library",
   "minimum-stability": "stable",
   "license": "proprietary",
   "authors": [
     {
       "name": "Timur Kasumov aka XAKEPEHOK",
-      "email": "support@leadvertex.com"
+      "email": "support@salesrender.com"
     }
   ],
   "autoload": {
     "psr-4": {
-      "Leadvertex\\Plugin\\Core\\Logistic\\": "src/"
+      "SalesRender\\Plugin\\Core\\Logistic\\": "src/"
     }
   },
   "require": {
     "php": ">=7.4.0",
     "ext-json": "*",
-    "leadvertex/plugin-core": "^0.3.0",
-    "leadvertex/plugin-component-logistic": "^1.0.0"
+    "salesrender/plugin-core": "^0.3.0",
+    "salesrender/plugin-component-logistic": "^1.0.0"
   },
   "require-dev": {
     "mockery/mockery": "^1.5",
@@ -27,7 +27,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "Leadvertex\\": "tests/Unit/"
+      "SalesRender\\": "tests/Unit/"
     }
   }
 }

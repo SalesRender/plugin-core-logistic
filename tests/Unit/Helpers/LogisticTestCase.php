@@ -1,12 +1,12 @@
 <?php
 
-namespace Leadvertex\Helpers;
+namespace SalesRender\Helpers;
 
-use Leadvertex\Plugin\Core\Logistic\Services\LogisticStatusesResolverService;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use SalesRender\Plugin\Core\Logistic\Services\LogisticStatusesResolverService;
 
 abstract class LogisticTestCase extends TestCase
 {

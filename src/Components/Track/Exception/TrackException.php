@@ -1,6 +1,6 @@
 <?php
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Track\Exception;
+namespace SalesRender\Plugin\Core\Logistic\Components\Track\Exception;
 
 use Exception;
 

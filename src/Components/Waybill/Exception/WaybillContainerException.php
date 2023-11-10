@@ -5,7 +5,7 @@
  * @author Timur Kasumov (XAKEPEHOK)
  */
 
-namespace Leadvertex\Plugin\Core\Logistic\Components\Waybill\Exception;
+namespace SalesRender\Plugin\Core\Logistic\Components\Waybill\Exception;
 
 
 use Exception;
