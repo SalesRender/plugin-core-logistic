@@ -26,16 +26,17 @@ final class WaybillContainer
     }
 
     /**
+     * @param array $context
      * @return Form
      * @throws WaybillContainerException
      */
-    public static function getForm(): Form
+    public static function getForm(array $context = []): Form
     {
         if (!isset(self::$form)) {
             throw new WaybillContainerException('Waybill form was not configured', 100);
         }
 
-        return (self::$form)();
+        return (self::$form)($context);
     }
 
     /**

@@ -25,7 +25,7 @@ class WebAppFactory extends \SalesRender\Plugin\Core\Factories\WebAppFactory
             ->addBatchActions()
             ->addForm(
                 'waybill',
-                fn() => WaybillContainer::getForm(),
+                fn(array $context) => WaybillContainer::getForm($context),
                 new WaybillHandlerAction()
             );
 
