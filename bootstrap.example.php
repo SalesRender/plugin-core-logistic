@@ -85,4 +85,5 @@ WaybillContainer::config(
 # 9. Configure shipping cancel action (optional)
 ShippingContainer::config(
     new ShippingCancelAction(),
+    new RemoveOrdersAction(),
 );

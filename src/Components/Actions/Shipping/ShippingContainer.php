@@ -6,11 +6,13 @@ use SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping\Exception\Shipp
 
 final class ShippingContainer
 {
-    private static ShippingCancelAction $action;
+    private static ShippingCancelAction $shippingCancelAction;
+    private static RemoveOrdersAction $removeOrdersAction;
 
-    public static function config(ShippingCancelAction $action): void
+    public static function config(ShippingCancelAction $shippingCancelAction, RemoveOrdersAction $removeOrdersAction): void
     {
-        self::$action = $action;
+        self::$shippingCancelAction = $shippingCancelAction;
+        self::$removeOrdersAction = $removeOrdersAction;
     }
 
     /**
@@ -19,10 +21,23 @@ final class ShippingContainer
      */
     public static function getShippingCancelAction(): ShippingCancelAction
     {
-        if (!isset(self::$action)) {
+        if (!isset(self::$shippingCancelAction)) {
             throw new ShippingContainerException('Shipping cancel action was not configured', 100);
         }
 
-        return self::$action;
+        return self::$shippingCancelAction;
+    }
+
+    /**
+     * @return RemoveOrdersAction
+     * @throws ShippingContainerException
+     */
+    public static function getRemoveOrdersAction(): RemoveOrdersAction
+    {
+        if (!isset(self::$removeOrdersAction)) {
+            throw new ShippingContainerException('Remove orders action was not configured', 200);
+        }
+
+        return self::$removeOrdersAction;
     }
 }

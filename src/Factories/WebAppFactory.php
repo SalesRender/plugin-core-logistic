@@ -8,7 +8,6 @@
 namespace SalesRender\Plugin\Core\Logistic\Factories;
 
 
-use SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping\Exception\ShippingContainerException;
 use SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping\ShippingContainer;
 use SalesRender\Plugin\Core\Logistic\Components\Actions\Track\TrackGetStatusesAction;
 use SalesRender\Plugin\Core\Logistic\Components\Waybill\WaybillContainer;
@@ -33,12 +32,10 @@ class WebAppFactory extends \SalesRender\Plugin\Core\Factories\WebAppFactory
             ->get('/protected/track/statuses/{trackNumber:[A-z\d\-_]{6,25}}', TrackGetStatusesAction::class)
             ->add($this->protected);
 
-        try {
-            $this
-                ->addCors()
-                ->addSpecialRequestAction(ShippingContainer::getShippingCancelAction());
-        } catch (ShippingContainerException $e) {
-        }
+        $this
+            ->addCors()
+            ->addSpecialRequestAction(ShippingContainer::getShippingCancelAction())
+            ->addSpecialRequestAction(ShippingContainer::getRemoveOrdersAction());
 
         return parent::build();
     }
