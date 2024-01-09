@@ -14,6 +14,8 @@ use SalesRender\Plugin\Components\Form\TableView\TablePreviewRegistry;
 use SalesRender\Plugin\Components\Info\Developer;
 use SalesRender\Plugin\Components\Info\Info;
 use SalesRender\Plugin\Components\Info\PluginType;
+use SalesRender\Plugin\Components\Purpose\LogisticPluginClass;
+use SalesRender\Plugin\Components\Purpose\PluginEntity;
 use SalesRender\Plugin\Components\Settings\Settings;
 use SalesRender\Plugin\Components\Translations\Translator;
 use SalesRender\Plugin\Core\Actions\Upload\LocalUploadAction;
@@ -44,7 +46,12 @@ Info::config(
     new PluginType(PluginType::MACROS),
     fn() => Translator::get('info', 'Plugin name'),
     fn() => Translator::get('info', 'Plugin markdown description'),
-    ["country" => "RU"],
+    [
+        "class" => LogisticPluginClass::CLASS_DELIVERY,
+        "entity" => PluginEntity::ENTITY_UNSPECIFIED,
+        "country" => "RU",
+        "codename" => "DPD",
+    ],
     new Developer(
         'Your (company) name',
         'support.for.plugin@example.com',
