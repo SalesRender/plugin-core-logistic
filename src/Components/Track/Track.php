@@ -12,6 +12,7 @@ use SalesRender\Plugin\Components\Db\Exceptions\DatabaseException;
 use SalesRender\Plugin\Components\Db\Helpers\UuidHelper;
 use SalesRender\Plugin\Components\Db\Model;
 use SalesRender\Plugin\Components\Db\PluginModelInterface;
+use SalesRender\Plugin\Components\Info\Info;
 use SalesRender\Plugin\Components\Logistic\Exceptions\LogisticOfficePhoneException;
 use SalesRender\Plugin\Components\Logistic\Exceptions\LogisticStatusTooLongException;
 use SalesRender\Plugin\Components\Logistic\LogisticOffice;
@@ -266,7 +267,9 @@ class Track extends Model implements PluginModelInterface
         $uri = (new Path($registration->getClusterUri()))
             ->down('companies')
             ->down(Connector::getReference()->getCompanyId())
-            ->down('CRM/plugin/logistic/status');
+            ->down('CRM/plugin/logistic/status')
+            ->down(strtolower(Info::getInstance()->getExtra()['class'] ?? ''))
+        ;
 
         $this->setNotified($lastStatus);
 
