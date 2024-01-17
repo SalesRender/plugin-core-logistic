@@ -8,10 +8,13 @@
 namespace SalesRender\Plugin\Core\Logistic\Factories;
 
 
+use SalesRender\Plugin\Components\Settings\Settings;
 use SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping\ShippingContainer;
 use SalesRender\Plugin\Core\Logistic\Components\Actions\Track\TrackGetStatusesAction;
+use SalesRender\Plugin\Core\Logistic\Components\Binding\Binding;
 use SalesRender\Plugin\Core\Logistic\Components\Waybill\WaybillContainer;
 use SalesRender\Plugin\Core\Logistic\Components\Waybill\WaybillHandlerAction;
+use SalesRender\Plugin\Core\Logistic\Helpers\LogisticHelper;
 use Slim\App;
 
 class WebAppFactory extends \SalesRender\Plugin\Core\Factories\WebAppFactory
@@ -36,6 +39,12 @@ class WebAppFactory extends \SalesRender\Plugin\Core\Factories\WebAppFactory
             ->addCors()
             ->addSpecialRequestAction(ShippingContainer::getShippingCancelAction())
             ->addSpecialRequestAction(ShippingContainer::getRemoveOrdersAction());
+
+        Settings::addOnSaveHandler(function (Settings $settings) {
+            if (LogisticHelper::isFulfillment()) {
+                Binding::find()->sync();
+            }
+        }, 'ffSync');
 
         return parent::build();
     }
