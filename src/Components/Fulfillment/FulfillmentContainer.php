@@ -12,22 +12,36 @@ use SalesRender\Plugin\Core\Logistic\Components\Fulfillment\Exception\Fulfillmen
 final class FulfillmentContainer
 {
 
-    private static FulfillmentSyncHandlerInterface $handler;
+    private static FulfillmentBindingHandlerInterface $bindingHandler;
+    private static FulfillmentSyncHandlerInterface $syncHandler;
 
     private function __construct() {}
 
-    public static function config(FulfillmentSyncHandlerInterface $handler): void
+    public static function config(
+        FulfillmentBindingHandlerInterface $bindingHandler,
+        FulfillmentSyncHandlerInterface $syncHandler
+    ): void
     {
-        self::$handler = $handler;
+        self::$bindingHandler = $bindingHandler;
+        self::$syncHandler = $syncHandler;
     }
 
-    public static function getHandler(): FulfillmentSyncHandlerInterface
+    public static function getBindingHandler(): FulfillmentBindingHandlerInterface
     {
-        if (!isset(self::$handler)) {
-            throw new FulfillmentContainerException('Fulfillment container handler was not configured');
+        if (!isset(self::$bindingHandler)) {
+            throw new FulfillmentContainerException('Fulfillment container binding handler was not configured');
         }
 
-        return self::$handler;
+        return self::$bindingHandler;
+    }
+
+    public static function getSyncHandler(): FulfillmentSyncHandlerInterface
+    {
+        if (!isset(self::$syncHandler)) {
+            throw new FulfillmentContainerException('Fulfillment container sync handler was not configured');
+        }
+
+        return self::$syncHandler;
     }
 
 }

@@ -39,7 +39,7 @@ class SyncAction extends SpecialRequestAction
             throw new FulfillmentSyncException('Failed to sync order. Plugin is not registered.');
         }
 
-        $handler = FulfillmentContainer::getHandler();
+        $handler = FulfillmentContainer::getSyncHandler();
 
         $iterator = new OrderFetcherIterator(
             ['orders' => $handler->getOrderFields()],
