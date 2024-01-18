@@ -9,7 +9,7 @@ namespace SalesRender\Plugin\Core\Logistic\Components\Binding\Exception;
 
 use Exception;
 
-class SyncException extends Exception
+class BindingSyncException extends Exception
 {
 
 }

@@ -13,7 +13,7 @@ use SalesRender\Plugin\Components\Db\Model;
 use SalesRender\Plugin\Components\Db\SinglePluginModelInterface;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Components\SpecialRequest;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Models\SpecialRequestTask;
-use SalesRender\Plugin\Core\Logistic\Components\Binding\Exception\SyncException;
+use SalesRender\Plugin\Core\Logistic\Components\Binding\Exception\BindingSyncException;
 use XAKEPEHOK\Path\Path;
 
 final class Binding extends Model implements SinglePluginModelInterface
@@ -104,7 +104,7 @@ final class Binding extends Model implements SinglePluginModelInterface
     {
         $registration = Registration::find();
         if ($registration === null) {
-            throw new SyncException('Failed to sync balances. Plugin is not registered.');
+            throw new BindingSyncException('Failed to sync balances. Plugin is not registered.');
         }
 
         $uri = (new Path($registration->getClusterUri()))
