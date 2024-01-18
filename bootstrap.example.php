@@ -107,4 +107,7 @@ ShippingContainer::config(
 );
 
 # 11. Configure fulfillment sync action
-FulfillmentContainer::config(new FulfillmentSyncHandlerInterface());
+FulfillmentContainer::config(
+    new FulfillmentBindingHandlerInterface(),
+    new FulfillmentSyncHandlerInterface()
+);
