@@ -22,6 +22,7 @@ use SalesRender\Plugin\Core\Actions\Upload\LocalUploadAction;
 use SalesRender\Plugin\Core\Actions\Upload\UploadersContainer;
 use SalesRender\Plugin\Core\Logistic\Components\Actions\Shipping\ShippingContainer;
 use SalesRender\Plugin\Core\Logistic\Components\BatchShippingHandler;
+use SalesRender\Plugin\Core\Logistic\Components\Fulfillment\FulfillmentContainer;
 use SalesRender\Plugin\Core\Logistic\Components\Waybill\WaybillContainer;
 use SalesRender\Plugin\Core\Logistic\Components\Waybill\WaybillHandlerInterface;
 use XAKEPEHOK\Path\Path;
@@ -99,8 +100,14 @@ WaybillContainer::config(
     new WaybillHandlerInterface()
 );
 
-# 10. Configure shipping cancel action (optional)
+# 10. Configure shipping cancel action (only for delivery plugins)
 ShippingContainer::config(
     new ShippingCancelAction(),
     new RemoveOrdersAction(),
+);
+
+# 11. Configure fulfillment sync action
+FulfillmentContainer::config(
+    new FulfillmentBindingHandlerInterface(),
+    new FulfillmentSyncHandlerInterface()
 );

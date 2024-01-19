@@ -2,6 +2,9 @@
 .idea/
 composer.lock
 .phpunit.result.cache
+.env
+db/database.db
 testDB.db
 console.php
+bootstrap.php
 docker-compose.yml
