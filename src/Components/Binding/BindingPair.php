@@ -15,18 +15,21 @@ final class BindingPair implements JsonSerializable
     private int $itemId;
     private int $variation;
     private string $externalId;
+    private string $label;
     private int $balance;
 
     public function __construct(
-        int $itemId,
-        int $variation,
+        int    $itemId,
+        int    $variation,
         string $externalId,
-        int $balance
+        string $label,
+        int    $balance
     )
     {
         $this->itemId = $itemId;
         $this->variation = $variation;
         $this->externalId = trim($externalId);
+        $this->label = $label;
         $this->balance = $balance;
     }
 
@@ -43,9 +46,14 @@ final class BindingPair implements JsonSerializable
     public function getExternalId(): string
     {
         if (empty($externalId)) {
-            return implode("_", [$this->itemId, $this->variation]);
+            return implode("_", [$this->itemId, $this->variation, $this->label]);
         }
         return $this->externalId;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
     }
 
     public function getBalance(): int
@@ -58,6 +66,7 @@ final class BindingPair implements JsonSerializable
         $data = [
             'itemId' => $this->itemId,
             'variation' => $this->variation,
+            'label' => $this->label,
             'balance' => $this->balance,
         ];
 

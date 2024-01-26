@@ -110,18 +110,18 @@ final class Binding extends Model implements SinglePluginModelInterface
         $uri = (new Path($registration->getClusterUri()))
             ->down('companies')
             ->down(Connector::getReference()->getCompanyId())
-            ->down('CRM/plugin/logistic/fulfillment/stock')
-        ;
+            ->down('CRM/plugin/logistic/fulfillment/stock');
 
         $this->syncedAt = time();
         $this->save();
 
-        $jwt = $registration->getSpecialRequestToken(array_map(
-            function (BindingPair $pair) {
-                return $pair->getBalance();
-            },
-            $this->pairs
-        ), 24 * 60 * 60);
+        $stock = [];
+        foreach ($this->pairs as $pair) {
+            $sku = implode('_', [$pair->getItemId(), $pair->getVariation()]);
+            $stock[$sku][$pair->getLabel()] = $pair->getBalance();
+        }
+
+        $jwt = $registration->getSpecialRequestToken($stock, 24 * 60 * 60);
 
         $request = new SpecialRequest(
             'PUT',
@@ -159,6 +159,7 @@ final class Binding extends Model implements SinglePluginModelInterface
                     (int)$data['itemId'],
                     (int)$data['variation'],
                     $data['externalId'] ?? '',
+                    $data['label'],
                     (int)$data['balance'],
                 );
             },
@@ -169,7 +170,7 @@ final class Binding extends Model implements SinglePluginModelInterface
 
     private function getKey(BindingPair $pair): string
     {
-        return implode('_', [$pair->getItemId(), $pair->getVariation()]);
+        return implode('_', [$pair->getItemId(), $pair->getVariation(), $pair->getLabel()]);
     }
 
     public static function tableName(): string
@@ -182,7 +183,7 @@ final class Binding extends Model implements SinglePluginModelInterface
         return [
             'updatedAt' => ['INT', 'NOT NULL'],
             'syncedAt' => ['INT', 'NULL'],
-            'data' => ['TEXT'],
+            'pairs' => ['TEXT'],
         ];
     }
 

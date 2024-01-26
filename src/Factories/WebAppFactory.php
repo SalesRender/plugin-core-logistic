@@ -36,13 +36,15 @@ class WebAppFactory extends \SalesRender\Plugin\Core\Factories\WebAppFactory
             ->get('/protected/track/statuses/{trackNumber:[A-z\d\-_]{6,25}}', TrackGetStatusesAction::class)
             ->add($this->protected);
 
-        $this
-            ->addCors()
-            ->addSpecialRequestAction(ShippingContainer::getShippingCancelAction())
-            ->addSpecialRequestAction(ShippingContainer::getRemoveOrdersAction());
-
         if (LogisticHelper::isFulfillment()) {
-            $this->addSpecialRequestAction(new SyncAction());
+            $this
+                ->addCors()
+                ->addSpecialRequestAction(new SyncAction());
+        } else {
+            $this
+                ->addCors()
+                ->addSpecialRequestAction(ShippingContainer::getShippingCancelAction())
+                ->addSpecialRequestAction(ShippingContainer::getRemoveOrdersAction());
         }
 
         Settings::addOnSaveHandler(function (Settings $settings) {

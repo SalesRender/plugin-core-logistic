@@ -14,16 +14,21 @@ final class FulfillmentContainer
 
     private static FulfillmentBindingHandlerInterface $bindingHandler;
     private static FulfillmentSyncHandlerInterface $syncHandler;
+    private static FulfillmentRemoveHandlerInterface $removeHandler;
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     public static function config(
         FulfillmentBindingHandlerInterface $bindingHandler,
-        FulfillmentSyncHandlerInterface $syncHandler
+        FulfillmentSyncHandlerInterface    $syncHandler,
+        FulfillmentRemoveHandlerInterface  $removeHandler
     ): void
     {
         self::$bindingHandler = $bindingHandler;
         self::$syncHandler = $syncHandler;
+        self::$removeHandler = $removeHandler;
     }
 
     public static function getBindingHandler(): FulfillmentBindingHandlerInterface
@@ -42,6 +47,15 @@ final class FulfillmentContainer
         }
 
         return self::$syncHandler;
+    }
+
+    public static function getRemoveHandler(): FulfillmentRemoveHandlerInterface
+    {
+        if (!isset(self::$removeHandler)) {
+            throw new FulfillmentContainerException('Fulfillment container sync handler was not configured');
+        }
+
+        return self::$removeHandler;
     }
 
 }
