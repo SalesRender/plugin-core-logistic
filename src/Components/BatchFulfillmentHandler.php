@@ -29,7 +29,7 @@ abstract class BatchFulfillmentHandler implements BatchHandlerInterface
             ->down($inputToken->getClaim('cid'))
             ->down('CRM/plugin/logistic/fulfillment');
 
-        return Guzzle::getInstance()->post(
+        return Guzzle::getInstance()->put(
             (string)$uri,
             [
                 'headers' => [
