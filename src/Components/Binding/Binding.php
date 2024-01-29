@@ -14,6 +14,7 @@ use SalesRender\Plugin\Components\Db\SinglePluginModelInterface;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Components\SpecialRequest;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Models\SpecialRequestTask;
 use SalesRender\Plugin\Core\Logistic\Components\Binding\Exception\BindingSyncException;
+use XAKEPEHOK\ArrayToUuidHelper\ArrayToUuidHelper;
 use XAKEPEHOK\Path\Path;
 
 final class Binding extends Model implements SinglePluginModelInterface
@@ -73,7 +74,7 @@ final class Binding extends Model implements SinglePluginModelInterface
         $key = $this->getKey($pair);
         if (isset($this->pairs[$key])) {
             $oldPair = $this->pairs[$key];
-            if ($oldPair->getBalance() !== $pair->getBalance()) {
+            if (ArrayToUuidHelper::generate($oldPair->getBalances()) !== ArrayToUuidHelper::generate($pair->getBalances())) {
                 $this->updatedAt = time();
             }
         } else {
@@ -110,18 +111,18 @@ final class Binding extends Model implements SinglePluginModelInterface
         $uri = (new Path($registration->getClusterUri()))
             ->down('companies')
             ->down(Connector::getReference()->getCompanyId())
-            ->down('CRM/plugin/logistic/fulfillment/stock')
-        ;
+            ->down('CRM/plugin/logistic/fulfillment/stock');
 
         $this->syncedAt = time();
         $this->save();
 
-        $jwt = $registration->getSpecialRequestToken(array_map(
-            function (BindingPair $pair) {
-                return $pair->getBalance();
-            },
-            $this->pairs
-        ), 24 * 60 * 60);
+        $stock = [];
+        foreach ($this->pairs as $pair) {
+            $sku = implode('_', [$pair->getItemId(), $pair->getVariation()]);
+            $stock[$sku] = $pair->getBalances();
+        }
+
+        $jwt = $registration->getSpecialRequestToken($stock, 24 * 60 * 60);
 
         $request = new SpecialRequest(
             'PUT',
@@ -159,7 +160,7 @@ final class Binding extends Model implements SinglePluginModelInterface
                     (int)$data['itemId'],
                     (int)$data['variation'],
                     $data['externalId'] ?? '',
-                    (int)$data['balance'],
+                    $data['balances'],
                 );
             },
             json_decode($data['pairs'], true)
@@ -182,7 +183,7 @@ final class Binding extends Model implements SinglePluginModelInterface
         return [
             'updatedAt' => ['INT', 'NOT NULL'],
             'syncedAt' => ['INT', 'NULL'],
-            'data' => ['TEXT'],
+            'pairs' => ['TEXT'],
         ];
     }
 

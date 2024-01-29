@@ -7,8 +7,6 @@
 
 namespace SalesRender\Plugin\Core\Logistic\Components;
 
-
-use Adbar\Dot;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -19,12 +17,12 @@ use SalesRender\Plugin\Components\Batch\BatchHandlerInterface;
 use SalesRender\Plugin\Components\Db\Helpers\UuidHelper;
 use SalesRender\Plugin\Components\Guzzle\Guzzle;
 use SalesRender\Plugin\Components\Logistic\Components\ShippingAttachment;
+use SalesRender\Plugin\Core\Logistic\Components\Traits\BatchLockTrait;
 use XAKEPEHOK\Path\Path;
 
 abstract class BatchShippingHandler implements BatchHandlerInterface
 {
-
-    protected string $lockId;
+    use BatchLockTrait;
 
     public function __construct()
     {
@@ -65,27 +63,6 @@ abstract class BatchShippingHandler implements BatchHandlerInterface
         }
 
         return $data['shippingId'];
-    }
-
-    protected function lockOrder(int $timeout, int $orderId, Batch $batch): bool
-    {
-        $batch->getApiClient()::$lockId = $this->lockId;
-        $client = $batch->getApiClient();
-
-        $query = '
-            mutation($id: ID!, $timeout: Int!) {
-              lockMutation {
-                lockEntity(input: { entity: { entity: Order, id: $id }, timeout: $timeout })
-              }
-            }
-        ';
-
-        $response = new Dot($client->query($query, [
-            'id' => $orderId,
-            'timeout' => $timeout,
-        ])->getData());
-
-        return $response->get('lockMutation.lockEntity', false);
     }
 
     /**

@@ -10,12 +10,11 @@ namespace SalesRender\Plugin\Core\Logistic\Components\Fulfillment;
 interface FulfillmentSyncHandlerInterface
 {
 
-    public function getOrderFields(): array;
+    public function getGraphqlOrderFields(): array;
 
     /**
-     * @param array $orderData
      * @return string|null should return null for success sync or human-readable error message on failure
      */
-    public function handle(array $orderData): ?string;
+    public function handle(array $graphqlOrder): ?string;
 
 }

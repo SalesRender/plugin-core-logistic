@@ -39,10 +39,27 @@ class SyncAction extends SpecialRequestAction
             throw new FulfillmentSyncException('Failed to sync order. Plugin is not registered.');
         }
 
-        $handler = FulfillmentContainer::getSyncHandler();
+        $uri = (new Path($registration->getClusterUri()))
+            ->down('companies')
+            ->down(Connector::getReference()->getCompanyId())
+            ->down('CRM/plugin/logistic/fulfillment/sync');
+
+        $syncHandler = FulfillmentContainer::getSyncHandler();
+        $removeHandler = FulfillmentContainer::getRemoveHandler();
+
+        if ($body['token'] === null) {
+            $this->sendSpecialRequest(
+                $registration,
+                $uri,
+                $id,
+                $orderId,
+                $removeHandler->handle($orderId),
+            );
+            return $response->withStatus(202);
+        }
 
         $iterator = new OrderFetcherIterator(
-            ['orders' => $handler->getOrderFields()],
+            ['orders' => $syncHandler->getGraphqlOrderFields()],
             $apiClient,
             new ApiFilterSortPaginate([
                 'filters' => [
@@ -55,29 +72,14 @@ class SyncAction extends SpecialRequestAction
             1
         );
 
-        foreach ($iterator as $orderData) {
-            $uri = (new Path($registration->getClusterUri()))
-                ->down('companies')
-                ->down(Connector::getReference()->getCompanyId())
-                ->down('CRM/plugin/logistic/fulfillment/sync')
-            ;
-
-            $jwt = $registration->getSpecialRequestToken([
-                'id' => $id,
-                'orderId' => $orderId,
-                'error' => $handler->handle($orderData)
-            ], 24 * 60 * 60);
-
-            $request = new SpecialRequest(
-                'PUT',
+        foreach ($iterator as $graphqlOrder) {
+            $this->sendSpecialRequest(
+                $registration,
                 $uri,
-                (string)$jwt,
-                time() + 30 * 60,
-                202,
+                $id,
+                $orderId,
+                $syncHandler->handle($graphqlOrder),
             );
-            $task = new SpecialRequestTask($request);
-            $task->save();
-
             return $response->withStatus(202);
         }
 
@@ -87,5 +89,24 @@ class SyncAction extends SpecialRequestAction
     public function getName(): string
     {
         return 'ffSync';
+    }
+
+    private function sendSpecialRequest(Registration $registration, Path $uri, string $id, string $orderId, ?string $error): void
+    {
+        $jwt = $registration->getSpecialRequestToken([
+            'id' => $id,
+            'orderId' => $orderId,
+            'error' => $error,
+        ], 24 * 60 * 60);
+
+        $request = new SpecialRequest(
+            'PUT',
+            $uri,
+            (string)$jwt,
+            time() + 30 * 60,
+            202,
+        );
+        $task = new SpecialRequestTask($request);
+        $task->save();
     }
 }

@@ -54,7 +54,7 @@ class FulfillmentSyncCommand extends MutexCommand
 
             $records = Connector::db()->select(
                 Binding::tableName(),
-                ['companyId', 'alias', 'id'],
+                ['companyId', 'pluginAlias', 'id'],
                 $condition,
             );
 
@@ -63,7 +63,7 @@ class FulfillmentSyncCommand extends MutexCommand
                 Binding::freeUpMemory();
                 Connector::setReference(new PluginReference(
                     $record['companyId'],
-                    $record['alias'],
+                    $record['pluginAlias'],
                     $record['id'],
                 ));
 
