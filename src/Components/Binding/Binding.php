@@ -14,6 +14,7 @@ use SalesRender\Plugin\Components\Db\SinglePluginModelInterface;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Components\SpecialRequest;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Models\SpecialRequestTask;
 use SalesRender\Plugin\Core\Logistic\Components\Binding\Exception\BindingSyncException;
+use SalesRender\Plugin\Core\Logistic\Helpers\ArrayToUuidHelper;
 use XAKEPEHOK\Path\Path;
 
 final class Binding extends Model implements SinglePluginModelInterface
@@ -73,7 +74,7 @@ final class Binding extends Model implements SinglePluginModelInterface
         $key = $this->getKey($pair);
         if (isset($this->pairs[$key])) {
             $oldPair = $this->pairs[$key];
-            if ($oldPair->getBalance() !== $pair->getBalance()) {
+            if (ArrayToUuidHelper::generate($oldPair->getBalances()) !== ArrayToUuidHelper::generate($pair->getBalances())) {
                 $this->updatedAt = time();
             }
         } else {
@@ -118,7 +119,7 @@ final class Binding extends Model implements SinglePluginModelInterface
         $stock = [];
         foreach ($this->pairs as $pair) {
             $sku = implode('_', [$pair->getItemId(), $pair->getVariation()]);
-            $stock[$sku][$pair->getLabel()] = $pair->getBalance();
+            $stock[$sku] = $pair->getBalances();
         }
 
         $jwt = $registration->getSpecialRequestToken($stock, 24 * 60 * 60);
@@ -159,8 +160,7 @@ final class Binding extends Model implements SinglePluginModelInterface
                     (int)$data['itemId'],
                     (int)$data['variation'],
                     $data['externalId'] ?? '',
-                    $data['label'],
-                    (int)$data['balance'],
+                    $data['balances'],
                 );
             },
             json_decode($data['pairs'], true)
@@ -170,7 +170,7 @@ final class Binding extends Model implements SinglePluginModelInterface
 
     private function getKey(BindingPair $pair): string
     {
-        return implode('_', [$pair->getItemId(), $pair->getVariation(), $pair->getLabel()]);
+        return implode('_', [$pair->getItemId(), $pair->getVariation()]);
     }
 
     public static function tableName(): string
