@@ -14,7 +14,7 @@ use SalesRender\Plugin\Components\Db\SinglePluginModelInterface;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Components\SpecialRequest;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Models\SpecialRequestTask;
 use SalesRender\Plugin\Core\Logistic\Components\Binding\Exception\BindingSyncException;
-use SalesRender\Plugin\Core\Logistic\Helpers\ArrayToUuidHelper;
+use XAKEPEHOK\ArrayToUuidHelper\ArrayToUuidHelper;
 use XAKEPEHOK\Path\Path;
 
 final class Binding extends Model implements SinglePluginModelInterface
