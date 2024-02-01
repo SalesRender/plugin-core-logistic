@@ -8,6 +8,7 @@
 namespace SalesRender\Plugin\Core\Logistic\Components\Actions\Fulfillment;
 
 use SalesRender\Plugin\Components\Access\Registration\Registration;
+use SalesRender\Plugin\Components\Access\Token\GraphqlInputToken;
 use SalesRender\Plugin\Components\ApiClient\ApiClient;
 use SalesRender\Plugin\Components\ApiClient\ApiFilterSortPaginate;
 use SalesRender\Plugin\Components\Db\Components\Connector;
@@ -26,18 +27,18 @@ class SyncAction extends SpecialRequestAction
 
     protected function handle(array $body, ServerRequest $request, Response $response, array $args): Response
     {
+        $registration = Registration::find();
+        if ($registration === null) {
+            throw new FulfillmentSyncException('Failed to sync order. Plugin is not registered.');
+        }
+
         $id = $body['id'];
         $orderId = $body['orderId'];
 
         $apiClient = new ApiClient(
             $body['endpoint'],
-            $body['token']
+            (new GraphqlInputToken($body['token']))->getOutputToken(),
         );
-
-        $registration = Registration::find();
-        if ($registration === null) {
-            throw new FulfillmentSyncException('Failed to sync order. Plugin is not registered.');
-        }
 
         $uri = (new Path($registration->getClusterUri()))
             ->down('companies')
@@ -62,12 +63,10 @@ class SyncAction extends SpecialRequestAction
             ['orders' => $syncHandler->getGraphqlOrderFields()],
             $apiClient,
             new ApiFilterSortPaginate([
-                'filters' => [
-                    'include' => [
-                        'ids' => [$orderId]
-                    ]
+                'include' => [
+                    'ids' => [$orderId]
                 ]
-            ], null, null),
+            ], null, 1),
             true,
             1
         );
