@@ -35,11 +35,6 @@ class SyncAction extends SpecialRequestAction
         $id = $body['id'];
         $orderId = $body['orderId'];
 
-        $apiClient = new ApiClient(
-            $body['endpoint'],
-            (new GraphqlInputToken($body['token']))->getOutputToken(),
-        );
-
         $uri = (new Path($registration->getClusterUri()))
             ->down('companies')
             ->down(Connector::getReference()->getCompanyId())
@@ -58,6 +53,11 @@ class SyncAction extends SpecialRequestAction
             );
             return $response->withStatus(202);
         }
+
+        $apiClient = new ApiClient(
+            $body['endpoint'],
+            (new GraphqlInputToken($body['token']))->getOutputToken(),
+        );
 
         $iterator = new OrderFetcherIterator(
             ['orders' => $syncHandler->getGraphqlOrderFields()],
