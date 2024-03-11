@@ -42,7 +42,7 @@ final class BindingPair implements JsonSerializable
 
     public function getExternalId(): string
     {
-        if (empty($externalId)) {
+        if (empty($this->externalId)) {
             return implode("_", [$this->itemId, $this->variation]);
         }
         return $this->externalId;
