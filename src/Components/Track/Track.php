@@ -288,6 +288,7 @@ class Track extends Model implements PluginModelInterface
             (string)$jwt,
             time() + 24 * 60 * 60,
             202,
+            [410], //410 - logistic removed from order
         );
         $task = new SpecialRequestTask($request);
         $task->save();
