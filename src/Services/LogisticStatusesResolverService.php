@@ -7,6 +7,8 @@ use SalesRender\Plugin\Core\Logistic\Components\Track\Track;
 
 class LogisticStatusesResolverService
 {
+    public static bool $sortStatuses = true;
+
     private Track $track;
 
     public function __construct(Track $track)
@@ -46,6 +48,10 @@ class LogisticStatusesResolverService
      */
     public function sort(): array
     {
+        if (self::$sortStatuses === false) {
+            return $this->track->getStatuses();
+        }
+
         $result = [];
         foreach (LogisticStatus::values() as $code) {
             $codeStatuses = array_filter($this->track->getStatuses(), fn(LogisticStatus $status) => $status->getCode() === $code);
