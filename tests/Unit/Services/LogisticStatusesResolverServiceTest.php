@@ -207,4 +207,49 @@ class LogisticStatusesResolverServiceTest extends LogisticTestCase
         $this->assertEquals($expected, $service->sort());
     }
 
+    public function getNotSortedStatusesDataProvider(): array
+    {
+        return [
+            [
+                [
+                    new LogisticStatus(LogisticStatus::DELIVERED_TO_SENDER, '', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::UNREGISTERED, '', strtotime('2022-01-01')),
+                ],
+                [
+                    new LogisticStatus(LogisticStatus::DELIVERED_TO_SENDER, '', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::UNREGISTERED, '', strtotime('2022-01-01')),
+                ],
+            ],
+            [
+                [
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-03')),
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::UNREGISTERED, '', strtotime('2022-01-04')),
+                    new LogisticStatus(LogisticStatus::UNREGISTERED, '', strtotime('2022-01-01')),
+                ],
+                [
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-03')),
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::UNREGISTERED, '', strtotime('2022-01-04')),
+                    new LogisticStatus(LogisticStatus::UNREGISTERED, '', strtotime('2022-01-01')),
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider getNotSortedStatusesDataProvider
+     */
+    public function testNotSort(array $statuses, array $expected)
+    {
+        LogisticStatusesResolverService::$sortStatuses = false;
+
+        $this->track->setStatuses($statuses);
+        $service = new LogisticStatusesResolverService($this->track);
+
+        $this->assertEquals($expected, $service->sort());
+    }
+
 }
