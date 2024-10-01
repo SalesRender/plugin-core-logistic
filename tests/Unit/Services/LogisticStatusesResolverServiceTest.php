@@ -8,6 +8,7 @@ use SalesRender\Plugin\Components\Logistic\Exceptions\LogisticStatusTooLongExcep
 use SalesRender\Plugin\Components\Logistic\LogisticStatus;
 use SalesRender\Plugin\Core\Logistic\Components\Track\Exception\TrackException;
 use SalesRender\Plugin\Core\Logistic\Components\Track\Track;
+use SalesRender\Plugin\Core\Logistic\Helpers\LogisticHelper;
 use SalesRender\Plugin\Core\Logistic\Services\LogisticStatusesResolverService;
 use XAKEPEHOK\EnumHelper\Exception\OutOfEnumException;
 
@@ -17,6 +18,7 @@ class LogisticStatusesResolverServiceTest extends LogisticTestCase
 
     protected function setUp(): void
     {
+        LogisticHelper::config(true);
         $this->track = Mockery::mock(Track::class)->makePartial();
         $this->track->shouldAllowMockingProtectedMethods()->shouldReceive('createNotification')->andReturnNull();
     }
@@ -231,7 +233,6 @@ class LogisticStatusesResolverServiceTest extends LogisticTestCase
                 [
                     new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-03')),
                     new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-02')),
-                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-02')),
                     new LogisticStatus(LogisticStatus::UNREGISTERED, '', strtotime('2022-01-04')),
                     new LogisticStatus(LogisticStatus::UNREGISTERED, '', strtotime('2022-01-01')),
                 ],
@@ -244,7 +245,7 @@ class LogisticStatusesResolverServiceTest extends LogisticTestCase
      */
     public function testNotSort(array $statuses, array $expected)
     {
-        LogisticStatusesResolverService::$sortStatuses = false;
+        LogisticHelper::config(false);
 
         $this->track->setStatuses($statuses);
         $service = new LogisticStatusesResolverService($this->track);

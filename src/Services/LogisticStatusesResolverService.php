@@ -4,11 +4,10 @@ namespace SalesRender\Plugin\Core\Logistic\Services;
 
 use SalesRender\Plugin\Components\Logistic\LogisticStatus;
 use SalesRender\Plugin\Core\Logistic\Components\Track\Track;
+use SalesRender\Plugin\Core\Logistic\Helpers\LogisticHelper;
 
 class LogisticStatusesResolverService
 {
-    public static bool $sortStatuses = true;
-
     private Track $track;
 
     public function __construct(Track $track)
@@ -42,13 +41,13 @@ class LogisticStatusesResolverService
 
 
     /**
-     * Данный метод сортирует статусы согласно порядку в @see LogisticStatus::values()
+     * Данный метод сортирует статусы согласно порядку в @return LogisticStatus[]
+     * @see LogisticStatus::values()
      * если у нас есть несколько статусов под одним кодом, то мы дополнительно их сортируем по времени от меньшего к большему
-     * @return LogisticStatus[]
      */
     public function sort(): array
     {
-        if (self::$sortStatuses === false) {
+        if (LogisticHelper::isSortTrackStatuses() === false) {
             return $this->track->getStatuses();
         }
 

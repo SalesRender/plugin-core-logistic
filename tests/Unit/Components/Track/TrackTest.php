@@ -12,6 +12,7 @@ use SalesRender\Plugin\Components\Logistic\LogisticStatus;
 use SalesRender\Plugin\Components\Logistic\Waybill\Waybill;
 use SalesRender\Plugin\Core\Logistic\Components\Track\Exception\TrackException;
 use SalesRender\Plugin\Core\Logistic\Components\Track\Track;
+use SalesRender\Plugin\Core\Logistic\Helpers\LogisticHelper;
 use XAKEPEHOK\EnumHelper\Exception\OutOfEnumException;
 
 class TrackTest extends LogisticTestCase
@@ -24,6 +25,7 @@ class TrackTest extends LogisticTestCase
 
     protected function setUp(): void
     {
+        LogisticHelper::config(true);
         $this->waybill = new Waybill(
             new \SalesRender\Plugin\Components\Logistic\Waybill\Track('123456'),
             new MoneyValue(100)
@@ -199,16 +201,19 @@ class TrackTest extends LogisticTestCase
                 [],
                 [],
                 [],
+                true,
             ],
             [
                 [],
                 [new LogisticStatus(LogisticStatus::DELIVERED)],
                 [new LogisticStatus(LogisticStatus::DELIVERED)],
+                true,
             ],
             [
                 [new LogisticStatus(LogisticStatus::DELIVERED)],
                 [new LogisticStatus(LogisticStatus::DELIVERED)],
                 [new LogisticStatus(LogisticStatus::DELIVERED)],
+                true,
             ],
             [
                 [
@@ -220,6 +225,7 @@ class TrackTest extends LogisticTestCase
                     new LogisticStatus(LogisticStatus::IN_TRANSIT),
                     new LogisticStatus(LogisticStatus::DELIVERED),
                 ],
+                true,
             ],
             [
                 [
@@ -234,6 +240,7 @@ class TrackTest extends LogisticTestCase
                     new LogisticStatus(LogisticStatus::RETURNED, '', strtotime('2022-01-02')),
                     new LogisticStatus(LogisticStatus::RETURNING_TO_SENDER, 'r_in_transit', strtotime('2022-01-03')),
                 ],
+                true,
             ],
             [
                 [
@@ -255,6 +262,45 @@ class TrackTest extends LogisticTestCase
                     new LogisticStatus(LogisticStatus::RETURNING_TO_SENDER, 'r_in_transit', strtotime('2022-01-02')),
                     new LogisticStatus(LogisticStatus::RETURNING_TO_SENDER, 'r_in_transit', strtotime('2022-01-03')),
                 ],
+                true,
+            ],
+            [
+                [
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-01')),
+                    new LogisticStatus(LogisticStatus::RETURNED, '', strtotime('2022-01-02')),
+                ],
+                [
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, 'r_in_transit', strtotime('2022-01-03')),
+                ],
+                [
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-01')),
+                    new LogisticStatus(LogisticStatus::RETURNED, '', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, 'r_in_transit', strtotime('2022-01-03')),
+                ],
+                false,
+            ],
+            [
+                [
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-01')),
+                    new LogisticStatus(LogisticStatus::RETURNED, '', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::RETURNING_TO_SENDER, 'r_in_transit', strtotime('2022-01-02')),
+                ],
+                [
+                    new LogisticStatus(LogisticStatus::ON_DELIVERY, 'r_in_transit', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::ON_DELIVERY, 'r_in_transit', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::ON_DELIVERY, 'r_in_transit', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::ON_DELIVERY, 'r_in_transit', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::ON_DELIVERY, 'r_in_transit', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::ON_DELIVERY, 'r_in_transit', strtotime('2022-01-03')),
+                ],
+                [
+                    new LogisticStatus(LogisticStatus::IN_TRANSIT, '', strtotime('2022-01-01')),
+                    new LogisticStatus(LogisticStatus::RETURNED, '', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::RETURNING_TO_SENDER, 'r_in_transit', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::ON_DELIVERY, 'r_in_transit', strtotime('2022-01-02')),
+                    new LogisticStatus(LogisticStatus::ON_DELIVERY, 'r_in_transit', strtotime('2022-01-03')),
+                ],
+                false,
             ],
         ];
     }
@@ -263,14 +309,16 @@ class TrackTest extends LogisticTestCase
      * @param LogisticStatus[] $current
      * @param LogisticStatus[] $new
      * @param LogisticStatus[] $expected
+     * @param bool $sortStatuses
      * @return void
      *
      * @throws LogisticStatusTooLongException
      * @throws OutOfEnumException
      * @dataProvider mergeStatusesDataProvider
      */
-    public function testMergeStatuses(array $current, array $new, array $expected): void
+    public function testMergeStatuses(array $current, array $new, array $expected, bool $sortStatuses): void
     {
+        LogisticHelper::config($sortStatuses);
         $this->assertEquals($expected, Track::mergeStatuses($current, $new));
     }
 
