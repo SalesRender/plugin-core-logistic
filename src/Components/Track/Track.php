@@ -21,6 +21,7 @@ use SalesRender\Plugin\Components\Logistic\Waybill\Waybill;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Components\SpecialRequest;
 use SalesRender\Plugin\Components\SpecialRequestDispatcher\Models\SpecialRequestTask;
 use SalesRender\Plugin\Core\Logistic\Components\Track\Exception\TrackException;
+use SalesRender\Plugin\Core\Logistic\Helpers\LogisticHelper;
 use SalesRender\Plugin\Core\Logistic\Services\LogisticStatusesResolverService;
 use XAKEPEHOK\EnumHelper\Exception\OutOfEnumException;
 use XAKEPEHOK\Path\Path;
@@ -191,6 +192,10 @@ class Track extends Model implements PluginModelInterface
         $new = self::filterNewStatutes($current, $new);
         $current = array_merge($current, $new);
 
+        if (LogisticHelper::isSortTrackStatuses() === false) {
+            return self::removeDuplicateStatuses($current);
+        }
+
         /**
          * Проверяем есть ли в статусах @see LogisticStatus::RETURNED
          * если его нет, то просто отдаем отфильтрованные статусы
@@ -227,8 +232,13 @@ class Track extends Model implements PluginModelInterface
         /**
          * удаляем повторяющиеся статусы, у которых hash могут совпасть после простановки @see LogisticStatus::RETURNING_TO_SENDER
          */
+        return self::removeDuplicateStatuses($current);
+    }
+
+    private static function removeDuplicateStatuses(array $statuses): array
+    {
         $result = [];
-        foreach ($current as $item) {
+        foreach ($statuses as $item) {
             $result[$item->getHash()] = $item;
         }
 
