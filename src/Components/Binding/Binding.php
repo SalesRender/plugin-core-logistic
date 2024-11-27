@@ -154,6 +154,9 @@ final class Binding extends Model implements SinglePluginModelInterface
 
     protected static function afterRead(array $data): array
     {
+        $pairs = json_decode($data['pairs'], true);
+        $pairs = is_array($pairs) ? $pairs : [];
+
         $data['pairs'] = array_map(
             function (array $data) {
                 return new BindingPair(
@@ -163,7 +166,7 @@ final class Binding extends Model implements SinglePluginModelInterface
                     $data['balances'],
                 );
             },
-            json_decode($data['pairs'], true)
+            $pairs,
         );
         return $data;
     }
