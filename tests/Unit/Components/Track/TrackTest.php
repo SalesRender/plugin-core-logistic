@@ -139,7 +139,6 @@ class TrackTest extends LogisticTestCase
                 new LogisticStatus(LogisticStatus::DELIVERED),
                 [
                     new LogisticStatus(LogisticStatus::DELIVERED),
-                    new LogisticStatus(LogisticStatus::DELIVERED),
                 ],
             ],
             [

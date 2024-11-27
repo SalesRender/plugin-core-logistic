@@ -144,6 +144,8 @@ class Track extends Model implements PluginModelInterface
         $status = end($filtered);
         if ($status !== false) {
             $this->statuses[] = $status;
+            $this->statuses = self::removeDuplicateStatuses($this->statuses);
+
             $this->createNotification();
         }
     }
