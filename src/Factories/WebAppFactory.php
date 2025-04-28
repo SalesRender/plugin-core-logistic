@@ -18,7 +18,7 @@ use SalesRender\Plugin\Core\Logistic\Components\Waybill\WaybillHandlerAction;
 use SalesRender\Plugin\Core\Logistic\Helpers\LogisticHelper;
 use Slim\App;
 
-class WebAppFactory extends \SalesRender\Plugin\Core\Factories\WebAppFactory
+class WebAppFactory extends \SalesRender\Plugin\Core\Geocoder\Factories\WebAppFactory
 {
 
     public function build(): App

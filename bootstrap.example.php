@@ -52,6 +52,7 @@ Info::config(
         "entity" => PluginEntity::ENTITY_UNSPECIFIED,
         "country" => "RU",
         "codename" => "DPD",
+        "geocoder" => false,
     ],
     new Developer(
         'Your (company) name',
