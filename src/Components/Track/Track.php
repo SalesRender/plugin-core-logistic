@@ -287,6 +287,7 @@ class Track extends Model implements PluginModelInterface
 
         $jwt = $registration->getSpecialRequestToken([
             'orderId' => $this->getId(),
+            'shippingId' => $this->getShippingId(),
             'waybill' => $this->getWaybill()->jsonSerialize(),
             'statuses' => $service->sort(),
             'status' => $lastStatus->jsonSerialize(),
