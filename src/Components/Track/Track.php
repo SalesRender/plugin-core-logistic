@@ -465,7 +465,7 @@ class Track extends Model implements PluginModelInterface
             'createdAt' => ['INT', 'NOT NULL'],
             'nextTrackingAt' => ['INT', 'NULL', 'DEFAULT NULL'],
             'lastTrackedAt' => ['INT', 'NULL', 'DEFAULT NULL'],
-            'statuses' => ['MEDIUMTEXT'],
+            'statuses' => ['TEXT'],
             'notificationsHashes' => ['TEXT'],
             'notifiedAt' => ['INT'],
             'stoppedAt' => ['INT', 'NULL', 'DEFAULT NULL'],
