@@ -144,6 +144,8 @@ class Track extends Model implements PluginModelInterface
         $status = end($filtered);
         if ($status !== false) {
             $this->statuses[] = $status;
+            $this->statuses = self::removeDuplicateStatuses($this->statuses);
+
             $this->createNotification();
         }
     }
@@ -285,6 +287,7 @@ class Track extends Model implements PluginModelInterface
 
         $jwt = $registration->getSpecialRequestToken([
             'orderId' => $this->getId(),
+            'shippingId' => $this->getShippingId(),
             'waybill' => $this->getWaybill()->jsonSerialize(),
             'statuses' => $service->sort(),
             'status' => $lastStatus->jsonSerialize(),
@@ -462,7 +465,7 @@ class Track extends Model implements PluginModelInterface
             'createdAt' => ['INT', 'NOT NULL'],
             'nextTrackingAt' => ['INT', 'NULL', 'DEFAULT NULL'],
             'lastTrackedAt' => ['INT', 'NULL', 'DEFAULT NULL'],
-            'statuses' => ['MEDIUMTEXT'],
+            'statuses' => ['TEXT'],
             'notificationsHashes' => ['TEXT'],
             'notifiedAt' => ['INT'],
             'stoppedAt' => ['INT', 'NULL', 'DEFAULT NULL'],
