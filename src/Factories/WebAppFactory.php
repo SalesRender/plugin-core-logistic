@@ -33,7 +33,7 @@ class WebAppFactory extends \SalesRender\Plugin\Core\Factories\WebAppFactory
             );
 
         $this->app
-            ->get('/protected/track/statuses/{trackNumber:[A-z\d\-_]{6,25}}', TrackGetStatusesAction::class)
+            ->get('/protected/track/statuses/{trackNumber:[A-z\d\-_]{6,36}}', TrackGetStatusesAction::class)
             ->add($this->protected);
 
         if (LogisticHelper::isFulfillment()) {
