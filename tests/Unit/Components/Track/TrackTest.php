@@ -4,7 +4,6 @@ namespace SalesRender\Components\Track;
 
 use DateTimeImmutable;
 use Mockery;
-use SalesRender\Components\MoneyValue\MoneyValue;
 use SalesRender\Helpers\LogisticTestCase;
 use SalesRender\Plugin\Components\Db\Components\PluginReference;
 use SalesRender\Plugin\Components\Logistic\Exceptions\LogisticStatusTooLongException;
@@ -28,7 +27,7 @@ class TrackTest extends LogisticTestCase
         LogisticHelper::config(true);
         $this->waybill = new Waybill(
             new \SalesRender\Plugin\Components\Logistic\Waybill\Track('123456'),
-            new MoneyValue(100)
+            100,
         );
         $this->pluginReference = new PluginReference('1', 'alias', '2');
         $this->track = new Track($this->pluginReference, $this->waybill, 'shipping', '3');
@@ -119,11 +118,12 @@ class TrackTest extends LogisticTestCase
 
         $expected = new Waybill(
             new \SalesRender\Plugin\Components\Logistic\Waybill\Track('track22'),
-            new MoneyValue(100)
+            100,
         );
         $this->track->setWaybill($expected);
 
         $this->assertEquals($expected, $this->track->getWaybill());
+        $this->assertSame('track22', $this->track->getTrack());
     }
 
     public function addStatusDataProvider(): array
@@ -332,7 +332,7 @@ class TrackTest extends LogisticTestCase
             'createdAt' => ['INT', 'NOT NULL'],
             'nextTrackingAt' => ['INT', 'NULL', 'DEFAULT NULL'],
             'lastTrackedAt' => ['INT', 'NULL', 'DEFAULT NULL'],
-            'statuses' => ['MEDIUMTEXT'],
+            'statuses' => ['TEXT'],
             'notificationsHashes' => ['TEXT'],
             'notifiedAt' => ['INT'],
             'stoppedAt' => ['INT', 'NULL', 'DEFAULT NULL'],

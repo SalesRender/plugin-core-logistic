@@ -66,11 +66,9 @@ class Track extends Model implements PluginModelInterface
         $this->pluginId = $pluginReference->getId();
 
         $this->id = $orderId;
-        $this->waybill = $waybill;
-        $this->track = $waybill->getTrack();
+        $this->setWaybill($waybill);
         $this->shippingId = $shippingId;
         $this->createdAt = time();
-        $this->segment = mb_substr(md5($waybill->getTrack()), -1);
     }
 
     public function getCompanyId(): string
@@ -325,6 +323,8 @@ class Track extends Model implements PluginModelInterface
     public function setWaybill(Waybill $waybill): void
     {
         $this->waybill = $waybill;
+        $this->track = $waybill->getTrack();
+        $this->segment = mb_substr(md5($waybill->getTrack()), -1);
     }
 
     /**
