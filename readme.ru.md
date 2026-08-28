@@ -32,7 +32,7 @@ composer require salesrender/plugin-core-logistic
 - ext-json
 - `salesrender/plugin-core` ^0.4.0
 - `salesrender/plugin-core-geocoder` ^0.3.0
-- `salesrender/plugin-component-logistic` ^2.0.0
+- `salesrender/plugin-component-logistic` ^2.1.0
 - `salesrender/plugin-component-purpose` ^2.0
 - `xakepehok/array-to-uuid-helper` ^0.1.0
 
@@ -663,6 +663,8 @@ Value object, возвращаемый `WaybillHandlerInterface`.
 
 При обнаружении новых статусов `Track` автоматически создаёт нотификацию (special request) в бэкенд SalesRender по адресу `/CRM/plugin/logistic/status/{class}`.
 
+Каждая нотификация несёт порядковый `index` (начиная с `1`) — номер уведомления в рамках отправки. Индекс проставляется иммутабельным методом `LogisticStatus::withIndex()` и включается в поле `status` payload'а уведомления, чтобы бэкенд мог отклонить устаревший статус, пришедший вне очереди. Индекс не участвует в hash статуса, поэтому дедупликация по `notificationsHashes` не затрагивается. Проиндексированный статус дополнительно подменяется в истории `statuses`, поэтому индекс сохраняется в колонке `tracks.statuses` и переживает перечитывание записи — дыры и монотонность можно проверить одним `SELECT`. Счётчик привязан к отправке, а не к трек-номеру: замена накладной его не сбрасывает.
+
 #### `TrackGetStatusesAction`
 
 **Пространство имён:** `SalesRender\Plugin\Core\Logistic\Components\Actions\Track\TrackGetStatusesAction`
@@ -793,7 +795,7 @@ Trait, предоставляющий функциональность блок�
 |-------|--------|------------|
 | [`salesrender/plugin-core`](https://github.com/SalesRender/plugin-core) | ^0.4.0 | Базовый фреймворк плагинов |
 | [`salesrender/plugin-core-geocoder`](https://github.com/SalesRender/plugin-core-geocoder) | ^0.3.0 | Поддержка геокодирования |
-| [`salesrender/plugin-component-logistic`](https://github.com/SalesRender/plugin-component-logistic) | ^2.0.0 | Модели данных логистики (Waybill, LogisticStatus, Logistic и др.) |
+| [`salesrender/plugin-component-logistic`](https://github.com/SalesRender/plugin-component-logistic) | ^2.1.0 | Модели данных логистики (Waybill, LogisticStatus с порядковым `index` статуса, Logistic и др.) |
 | [`salesrender/plugin-component-purpose`](https://github.com/SalesRender/plugin-component-purpose) | ^2.0 | Определения типов плагинов (`LogisticPluginClass`) |
 | `xakepehok/array-to-uuid-helper` | ^0.1.0 | Генерация UUID из массивов (для обнаружения изменений в привязках) |
 

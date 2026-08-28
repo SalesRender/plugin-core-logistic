@@ -283,6 +283,17 @@ class Track extends Model implements PluginModelInterface
 
         $this->setNotified($lastStatus);
 
+        $lastStatus = $lastStatus->withIndex(count($this->notificationsHashes));
+
+        // Substitute the status in the history with the indexed version — for DB observability.
+        // The hash matches, so deduplication and order are unaffected
+        foreach ($this->statuses as $index => $status) {
+            if ($status->getHash() === $lastStatus->getHash()) {
+                $this->statuses[$index] = $lastStatus;
+                break;
+            }
+        }
+
         $jwt = $registration->getSpecialRequestToken([
             'orderId' => $this->getId(),
             'shippingId' => $this->getShippingId(),
@@ -416,7 +427,11 @@ class Track extends Model implements PluginModelInterface
         $data = parent::afterRead($data);
 
         $data['statuses'] = array_map(function (array $item) {
-            return new LogisticStatus($item['code'], $item['text'], $item['timestamp'], LogisticOffice::createFromArray($item['office']));
+            $status = new LogisticStatus($item['code'], $item['text'], $item['timestamp'], LogisticOffice::createFromArray($item['office']));
+
+            return isset($item['index'])
+                ? $status->withIndex((int)$item['index'])
+                : $status;
         }, json_decode($data['statuses'], true));
         $data['notificationsHashes'] = json_decode($data['notificationsHashes'], true);
         $data['waybill'] = Waybill::createFromArray(json_decode($data['waybill'], true));
