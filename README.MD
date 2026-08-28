@@ -32,7 +32,7 @@ composer require salesrender/plugin-core-logistic
 - ext-json
 - `salesrender/plugin-core` ^0.4.0
 - `salesrender/plugin-core-geocoder` ^0.3.0
-- `salesrender/plugin-component-logistic` ^2.0.0
+- `salesrender/plugin-component-logistic` ^2.1.0
 - `salesrender/plugin-component-purpose` ^2.0
 - `xakepehok/array-to-uuid-helper` ^0.1.0
 
@@ -665,6 +665,8 @@ Status merging logic (`mergeStatuses`) handles deduplication and automatically m
 
 When new statuses are detected, the `Track` automatically creates a notification (special request) to the SalesRender backend at `/CRM/plugin/logistic/status/{class}`.
 
+Each notification carries a sequential `index` (starting from `1`) — the ordinal number of the notification within the shipping. The index is set via the immutable `LogisticStatus::withIndex()` and is included in the `status` field of the notification payload, so the backend can reject an outdated status delivered out of order. The index does not participate in the status hash, so deduplication by `notificationsHashes` is unaffected. The indexed status is also substituted in the `statuses` history, so the index is persisted in the `tracks.statuses` column and survives reloads — gaps and monotonicity can be checked with a single `SELECT`. The counter is bound to the shipping, not to the tracking number: replacing the waybill does not reset it.
+
 #### `TrackGetStatusesAction`
 
 **Namespace:** `SalesRender\Plugin\Core\Logistic\Components\Actions\Track\TrackGetStatusesAction`
@@ -795,7 +797,7 @@ The example demonstrates a **shipping** plugin with:
 |---------|---------|---------|
 | [`salesrender/plugin-core`](https://github.com/SalesRender/plugin-core) | ^0.4.0 | Base plugin framework |
 | [`salesrender/plugin-core-geocoder`](https://github.com/SalesRender/plugin-core-geocoder) | ^0.3.0 | Geocoding support |
-| [`salesrender/plugin-component-logistic`](https://github.com/SalesRender/plugin-component-logistic) | ^2.0.0 | Logistic data models (Waybill, LogisticStatus, Logistic, etc.) |
+| [`salesrender/plugin-component-logistic`](https://github.com/SalesRender/plugin-component-logistic) | ^2.1.0 | Logistic data models (Waybill, LogisticStatus with sequential status `index`, Logistic, etc.) |
 | [`salesrender/plugin-component-purpose`](https://github.com/SalesRender/plugin-component-purpose) | ^2.0 | Plugin type definitions (`LogisticPluginClass`) |
 | `xakepehok/array-to-uuid-helper` | ^0.1.0 | UUID generation from arrays (for binding change detection) |
 
